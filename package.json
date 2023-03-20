@@ -5,29 +5,30 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "ts-node --esm index.ts",
-    "build": "tsc index.ts"
+    "start": "ts-node --esm src/server.ts",
+    "build": "tsc src/server.ts"
   },
   "author": "",
   "dependencies": {
     "@chainsafe/libp2p-gossipsub": "^6.2.0",
     "@chainsafe/libp2p-noise": "^11.0.0",
-    "@chainsafe/libp2p-yamux": "^3.0.5",
+    "@chainsafe/libp2p-yamux": "^3.0.7",
     "@helia/ipns": "^1.0.0",
     "@helia/unixfs": "^1.0.1",
     "@libp2p/bootstrap": "^6.0.0",
-    "@libp2p/kad-dht": "^7.0.0",
-    "@libp2p/tcp": "^6.1.2",
+    "@libp2p/kad-dht": "^8.0.1",
+    "@libp2p/tcp": "^6.1.4",
     "@libp2p/websockets": "^5.0.3",
-    "blockstore-core": "^3.0.0",
-    "datastore-core": "^8.0.4",
-    "datastore-level": "^9.0.4",
+    "blockstore-core": "^4.0.1",
+    "datastore-core": "^9.0.3",
+    "datastore-level": "^10.0.1",
     "dotenv": "^16.0.3",
     "fastify": "^4.13.0",
+    "fastify-plugin": "^4.5.0",
     "helia": "next",
     "ipfs-unixfs-importer": "^14.0.1",
-    "libp2p": "^0.42.2",
-    "multiformats": "^11.0.1"
+    "libp2p": "^0.43.0",
+    "multiformats": "^11.0.2"
   },
   "devDependencies": {
     "ts-node": "^10.9.1",

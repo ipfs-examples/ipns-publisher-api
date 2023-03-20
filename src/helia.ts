@@ -6,7 +6,12 @@ import { createLibp2p, Libp2p } from 'libp2p'
 import { bootstrap } from '@libp2p/bootstrap'
 import { createHelia } from 'helia'
 import type { Helia } from '@helia/interface'
-import { ipns as startIPNS, ipnsValidator, ipnsSelector } from '@helia/ipns'
+import {
+  ipns as startIPNS,
+  ipnsValidator,
+  ipnsSelector,
+  IPNS,
+} from '@helia/ipns'
 import { dht, pubsub } from '@helia/ipns/routing'
 import { unixfs } from '@helia/unixfs'
 import { tcp } from '@libp2p/tcp'
@@ -16,7 +21,11 @@ import { MemoryBlockstore } from 'blockstore-core'
 import { MemoryDatastore } from 'datastore-core'
 import { wait } from './utils.js'
 
-export async function startHelia(): Promise<{ helia: Helia, libp2p: Libp2p} > {
+export async function startHelia(): Promise<{
+  helia: Helia
+  libp2p: Libp2p
+  ipns: IPNS
+}> {
   // application-specific data lives in the datastore
   const datastore = new LevelDatastore(`${process.env.DATA_DIR}/data`)
   const libp2p = await createLibp2p({
@@ -59,27 +68,7 @@ export async function startHelia(): Promise<{ helia: Helia, libp2p: Libp2p} > {
     console.log(peers)
   }, 5000)
 
-  return { helia, libp2p }
-}
-
-async function publishRecord(helia: Helia) {
-  // create a public key to publish as an IPNS name
-  const keyInfo = await helia.libp2p.keychain.createKey(
-    `test-${Date.now()}`,
-    'Ed25519',
-  )
-  const peerId = await helia.libp2p.keychain.exportPeerId(keyInfo.name)
-
-  const cidOfImg = CID.parse(
-    'bafybeicklkqcnlvtiscr2hzkubjwnwjinvskffn4xorqeduft3wq7vm5u4',
-  )
-
   const ipns = startIPNS(helia, [dht(helia), pubsub(helia)])
-  await wait(30)
-  // publish the name
-  await ipns.publish(peerId, cidOfImg, {
-    onProgress(evt) {
-      console.log(evt)
-    },
-  })
+
+  return { helia, libp2p, ipns }
 }
