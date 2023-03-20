@@ -23,6 +23,7 @@
     "datastore-core": "^8.0.4",
     "datastore-level": "^9.0.4",
     "dotenv": "^16.0.3",
+    "fastify": "^4.13.0",
     "helia": "next",
     "ipfs-unixfs-importer": "^14.0.1",
     "libp2p": "^0.42.2",
