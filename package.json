@@ -1,5 +1,5 @@
 {
-  "name": "ipns-helia-api",
+  "name": "ipns-publisher-api",
   "version": "1.0.0",
   "description": "A Helia node with a custom API for publishing IPNS names",
   "main": "index.js",
