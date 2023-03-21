@@ -65,10 +65,10 @@ export async function startHelia(): Promise<{
     libp2p,
   })
 
-  setInterval(() => {
-    const peers = libp2p.getPeers()
-    console.log(peers)
-  }, 5000)
+  // setInterval(() => {
+  //   const peers = libp2p.getPeers()
+  //   console.log(peers)
+  // }, 5000)
 
   const ipns = startIPNS(helia, [dht(helia), pubsub(helia)])
 

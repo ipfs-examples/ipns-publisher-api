@@ -4,8 +4,12 @@
   "description": "A Helia node with a custom API for publishing IPNS names",
   "main": "index.js",
   "type": "module",
+  "ts-node": {
+    "esm": true
+  },
   "scripts": {
-    "start": "ts-node --esm src/server.ts",
+    "start": "ts-node-esm src/index.ts",
+    "dev": "nodemon --exec ts-node-esm src/index.ts",
     "build": "tsc"
   },
   "author": "",
@@ -17,6 +21,7 @@
     "@helia/unixfs": "^1.2.0",
     "@libp2p/bootstrap": "^6.0.3",
     "@libp2p/kad-dht": "^8.0.1",
+    "@libp2p/peer-id": "^2.0.3",
     "@libp2p/tcp": "^6.1.4",
     "@libp2p/websockets": "^5.0.7",
     "blockstore-core": "^4.0.1",
@@ -31,6 +36,8 @@
     "multiformats": "^11.0.2"
   },
   "devDependencies": {
+    "nodemon": "^2.0.21",
+    "pino-pretty": "^10.0.0",
     "ts-node": "^10.9.1",
     "typescript": "^5.0.2"
   }

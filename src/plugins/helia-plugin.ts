@@ -1,4 +1,4 @@
-import { startHelia } from './helia.js'
+import { startHelia } from '../lib/helia.js'
 import { FastifyInstance, FastifyPluginAsync } from 'fastify'
 import fp from 'fastify-plugin'
 import { Libp2p } from 'libp2p'
@@ -17,9 +17,10 @@ declare module 'fastify' {
 
 // define plugin using promises
 const heliaPlugin: FastifyPluginAsync = async (fastify, options) => {
-  const { helia, libp2p } = await startHelia()
+  const { helia, libp2p, ipns } = await startHelia()
   fastify.decorate('libp2p', libp2p)
   fastify.decorate('helia', helia)
+  fastify.decorate('ipns', ipns)
 }
 
 export default fp(heliaPlugin)
