@@ -56,13 +56,12 @@ export async function startHelia(): Promise<{
     ],
   })
 
-  const blockstore = new LevelDatastore(`${process.env.DATA_DIR}/data`)
+  // const blockstore = new LevelDatastore(`${process.env.DATA_DIR}/data`)
 
   // create a Helia node
   const helia = await createHelia({
     blockstore: new MemoryBlockstore(),
-    // blockstore,
-    datastore,
+    datastore: new MemoryDatastore(),
     libp2p,
   })
 
