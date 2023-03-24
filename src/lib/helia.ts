@@ -26,6 +26,8 @@ export async function startHelia(): Promise<{
   libp2p: Libp2p
   ipns: IPNS
 }> {
+  console.log(process.env.DEBUG)
+
   // application-specific data lives in the datastore
   const datastore = new LevelDatastore(`${process.env.DATA_DIR}/data`)
   const libp2p = await createLibp2p({
@@ -61,7 +63,7 @@ export async function startHelia(): Promise<{
   // create a Helia node
   const helia = await createHelia({
     blockstore: new MemoryBlockstore(),
-    datastore: new MemoryDatastore(),
+    datastore,
     libp2p,
   })
 

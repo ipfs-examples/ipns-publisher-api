@@ -4,6 +4,8 @@ import fp from 'fastify-plugin'
 import { Libp2p } from 'libp2p'
 import { Helia } from '@helia/interface'
 import { IPNS } from '@helia/ipns'
+import statusPlugin from './status.js'
+import ipnsPlugin from './ipns.js'
 
 // using declaration merging, add your plugin props to the appropriate fastify interfaces
 // if prop type is defined here, the value will be typechecked when you call decorate{,Request,Reply}
@@ -21,6 +23,9 @@ const heliaPlugin: FastifyPluginAsync = async (fastify, options) => {
   fastify.decorate('libp2p', libp2p)
   fastify.decorate('helia', helia)
   fastify.decorate('ipns', ipns)
+
+  fastify.register(statusPlugin)
+  fastify.register(ipnsPlugin)
 }
 
 export default fp(heliaPlugin)
