@@ -1,6 +1,6 @@
 import { FastifyInstance, FastifyPluginAsync } from 'fastify'
 import { publishRecord } from '../lib/ipns.js'
-import { CID } from 'multiformats'
+import { CID, Version } from 'multiformats'
 import { base36 } from 'multiformats/bases/base36'
 import { peerIdFromString } from '@libp2p/peer-id'
 import { base32 } from 'multiformats/bases/base32'
@@ -8,10 +8,10 @@ import { base32 } from 'multiformats/bases/base32'
 // Plugin for IPNS specific routes
 const ipnsPlugin: FastifyPluginAsync = async (fastify, options) => {
   fastify.get('/ipns/names', async (request, reply) => {
-    let keys = await fastify.libp2p.keychain.listKeys()
+    let keychainKeys = await fastify.libp2p.keychain.listKeys()
 
     // Create an array of the local keys, their label, and their CID representation
-    let peers = keys.map((k) => {
+    let keys = keychainKeys.map((k) => {
       const peer = peerIdFromString(k.id)
       return {
         keyName: k.name,
@@ -20,15 +20,22 @@ const ipnsPlugin: FastifyPluginAsync = async (fastify, options) => {
       }
     })
 
-    // Resolve the current value of the IPNS records
-    // TODO: figure out how to keep the IPNS resolve local
-    let names = await Promise.all(
-      peers.map((p) => fastify.ipns.resolve(p.peerId)),
+    // resolve the name locally to see if they have an associated IPNS record
+    const names = await Promise.allSettled(
+      // ipnsLocal will only resolve locally and will reject the promise if there's no record
+      keys.map((p) => fastify.ipnsLocal.resolve(p.peerId)),
     )
 
-    // Merge the two arrays with the
-    return peers.reduce((acc: {}[], cur, idx) => {
-      acc.push({ ...cur, ipnsValue: names[idx].toString() })
+    // Merge the keys and names array into one
+    return keys.reduce((acc: {}[], cur, idx) => {
+      const curName = names[idx]
+      if (curName.status === 'fulfilled') {
+        // a record has been resolved locally
+        acc.push({ ...cur, ipnsValue: curName.value.toV1().toString() })
+      } else {
+        // the key has no published ipns record
+        acc.push({ ...cur })
+      }
       return acc
     }, [])
   })
@@ -51,7 +58,7 @@ const ipnsPlugin: FastifyPluginAsync = async (fastify, options) => {
           request.params.cid,
         )
 
-        return ipnsRecord
+        return ipnsRecord.toString()
       },
     },
   )

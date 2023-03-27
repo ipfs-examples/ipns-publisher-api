@@ -6,27 +6,17 @@ import { createLibp2p, Libp2p } from 'libp2p'
 import { bootstrap } from '@libp2p/bootstrap'
 import { createHelia } from 'helia'
 import type { Helia } from '@helia/interface'
-import {
-  ipns as startIPNS,
-  ipnsValidator,
-  ipnsSelector,
-  IPNS,
-} from '@helia/ipns'
-import { dht, pubsub } from '@helia/ipns/routing'
 import { unixfs } from '@helia/unixfs'
 import { tcp } from '@libp2p/tcp'
 import { noise } from '@chainsafe/libp2p-noise'
 import { yamux } from '@chainsafe/libp2p-yamux'
 import { MemoryBlockstore } from 'blockstore-core'
 import { MemoryDatastore } from 'datastore-core'
-import { wait } from './utils.js'
 
 export async function startHelia(): Promise<{
   helia: Helia
   libp2p: Libp2p
-  ipns: IPNS
 }> {
-  console.log(process.env.DEBUG)
 
   // application-specific data lives in the datastore
   const datastore = new LevelDatastore(`${process.env.DATA_DIR}/data`)
@@ -72,7 +62,7 @@ export async function startHelia(): Promise<{
   //   console.log(peers)
   // }, 5000)
 
-  const ipns = startIPNS(helia, [dht(helia), pubsub(helia)])
 
-  return { helia, libp2p, ipns }
+
+  return { helia, libp2p }
 }

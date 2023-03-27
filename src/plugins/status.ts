@@ -14,6 +14,7 @@ const statusPlugin: FastifyPluginAsync = async (fastify, options) => {
     return {
       id: fastify.libp2p.peerId.toString(),
       protocols: fastify.libp2p.getProtocols(),
+      addrs: fastify.libp2p.getMultiaddrs(),
     }
   })
 
