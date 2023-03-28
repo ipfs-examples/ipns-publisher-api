@@ -58,7 +58,17 @@ const ipnsPlugin: FastifyPluginAsync = async (fastify, options) => {
           request.params.cid,
         )
 
-        return ipnsRecord.toString()
+        const key = await fastify.libp2p.keychain.findKeyByName(
+          request.params.keyName,
+        )
+        // Represnet the raw key as a CID for convinience
+        const keyAsb36Cid = peerIdFromString(key.id).toCID().toString(base36)
+
+        return {
+          sequence: ipnsRecord.sequence,
+          name: key.id,
+          nameb36: keyAsb36Cid,
+        }
       },
     },
   )

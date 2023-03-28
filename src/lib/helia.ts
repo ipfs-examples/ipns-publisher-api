@@ -17,7 +17,6 @@ export async function startHelia(): Promise<{
   helia: Helia
   libp2p: Libp2p
 }> {
-
   // application-specific data lives in the datastore
   const datastore = new LevelDatastore(`${process.env.DATA_DIR}/data`)
   const libp2p = await createLibp2p({
@@ -56,13 +55,6 @@ export async function startHelia(): Promise<{
     datastore,
     libp2p,
   })
-
-  // setInterval(() => {
-  //   const peers = libp2p.getPeers()
-  //   console.log(peers)
-  // }, 5000)
-
-
 
   return { helia, libp2p }
 }
